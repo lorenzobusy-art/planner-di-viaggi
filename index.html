@@ -191,6 +191,7 @@ h1{font:700 26px/1.1 var(--display);margin:0;letter-spacing:-.02em}
 @media (max-width:1000px){.mainrow{grid-template-columns:1fr}.mapcard{height:62vh}.assist{grid-template-columns:1fr}.chips{margin-left:0}}
 @media (max-width:700px){.row{grid-template-columns:24px 30px minmax(0,1fr)}.acts{grid-column:1/-1;justify-content:flex-start}.notebox,.notetxt{grid-column:1/-1}.leg{margin-left:40px}h1{font-size:21px}}
 </style>
+<link rel="stylesheet" href="lib/leaflet.css">
 <link rel="stylesheet" href="lib/extra.css">
 </head>
 <body>
@@ -946,11 +947,11 @@ function renderDrop(){
   if(saved.length){sec("Nel viaggio");saved.forEach(p=>add({type:"saved",id:p.id},p.name,p.sub||CATS[p.cat].n,"Mostra"))}
   if(cur.length){sec("Destinazioni");cur.forEach(c=>add({type:"city",...c},c.name,c.sub,"Aggiungi"))}
   if(big.length){sec("Città nel mondo");big.forEach(c=>add({type:"city",name:c.name,sub:cname(c.cc),lat:c.lat,lon:c.lon},c.name,cname(c.cc)+" · "+(c.pop>=1e6?(c.pop/1e6).toFixed(1).replace(".",",")+" mln":Math.round(c.pop/1000)+" mila")+" ab.","Aggiungi"))}
-  if(aiState.q===v&&aiState.res&&aiState.res.length){sec("Risultati Google Maps");aiState.res.forEach(r=>add({type:"ai",...r},r.name,(r.sub||"")+(r.desc?" · "+r.desc:""),"Aggiungi"))}
+  if(aiState.q===v&&aiState.res&&aiState.res.length){sec("Risultati");aiState.res.forEach(r=>add({type:"ai",...r},r.name,(r.sub||"")+(r.desc?" · "+r.desc:""),"Aggiungi"))}
   sec("Cerca ovunque");
-  if(aiState.busy)h+='<div class="empty"><span class="spin">'+ic("load")+'</span> Cerco su Google Maps…</div>';
+  if(aiState.busy)h+='<div class="empty"><span class="spin">'+ic("load")+'</span> Cerco…</div>';
   else if(aiState.err&&aiState.q===v)h+='<div class="empty">'+esc(aiState.err)+'</div>';
-  if(sampleFn)add({type:"ask"},"Cerca su Google Maps: «"+v+"»","Luoghi reali, ristoranti, hotel, monumenti con coordinate","Cerca");
+  if(sampleFn)add({type:"ask"},"Cerca luogo: «"+v+"»","Luoghi reali, ristoranti, hotel, monumenti con coordinate","Cerca");
   add({type:"link",href:gmapsQ(v)},"Google Maps: «"+v+"»","Si apre in una nuova scheda","Apri");
   add({type:"link",href:tripadv(v)},"Tripadvisor: «"+v+"»","Hotel, ristoranti, attrazioni","Apri");
   drop.innerHTML=h;drop.hidden=false;
@@ -986,7 +987,8 @@ applyTheme();
 renderAll();applyView();fit(true);
 loadData();initCloud();initSample();
 </script>
+<script src="lib/leaflet.js"></script>
 <script src="lib/extra.js"></script>
-<script src="lib/gmaps.js"></script>
+<script src="lib/osm.js"></script>
 </body>
 </html>
